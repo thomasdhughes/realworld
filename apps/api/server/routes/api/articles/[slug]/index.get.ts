@@ -36,5 +36,5 @@ const slug = getRouterParam(event, 'slug');
         throw new HttpException(404, { errors: { article: ['not found'] } });
     }
 
-    return {article: articleMapper(article, auth.id)};
+    return {article: articleMapper(article, auth?.id)};
 }, {requireAuth: false});
