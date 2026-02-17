@@ -47,7 +47,7 @@ export default definePrivateEventHandler(async (event, {auth}) => {
     });
 
     return {
-        articles: articles.map((article: any) => articleMapper(article, auth.id)),
+        articles: articles.map((article: any) => articleMapper(article, auth?.id)),
         articlesCount,
     };
 }, {requireAuth: false});
@@ -57,38 +57,17 @@ const buildFindAllQuery = (query: any, auth: {id: number} | undefined) => {
     const orAuthorQuery = [];
     const andAuthorQuery = [];
 
-    orAuthorQuery.push({
-        demo: {
-            equals: true,
-        },
-    });
-
-    if (auth?.id) {
-        orAuthorQuery.push({
-            id: {
-                equals: auth?.id,
+    if (query.author) {
+        queries.push({
+            author: {
+                username: {
+                    equals: query.author,
+                },
             },
         });
     }
 
-    if ('author' in query) {
-        andAuthorQuery.push({
-            username: {
-                equals: query.author,
-            },
-        });
-    }
-
-    const authorQuery = {
-        author: {
-            OR: orAuthorQuery,
-            AND: andAuthorQuery,
-        },
-    };
-
-    queries.push(authorQuery);
-
-    if ('tag' in query) {
+    if (query.tag) {
         queries.push({
             tagList: {
                 some: {
@@ -98,7 +77,7 @@ const buildFindAllQuery = (query: any, auth: {id: number} | undefined) => {
         });
     }
 
-    if ('favorited' in query) {
+    if (query.favorited) {
         queries.push({
             favoritedBy: {
                 some: {
