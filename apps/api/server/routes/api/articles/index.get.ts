@@ -54,8 +54,6 @@ export default definePrivateEventHandler(async (event, {auth}) => {
 
 const buildFindAllQuery = (query: any, auth: {id: number} | undefined) => {
     const queries: any = [];
-    const orAuthorQuery = [];
-    const andAuthorQuery = [];
 
     if (query.author) {
         queries.push({
